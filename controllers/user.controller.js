@@ -13,7 +13,7 @@ expireTime = '1 hour';
 router.post('/signup', async (req, res) => {
 	try {
 		const user = new User({
-			username: req.body.username,
+			userName: req.body.userName,
 			email: req.body.email,
 			password: bcrypt.hashSync(req.body.password, 10)
 		});
@@ -31,6 +31,7 @@ router.post('/signup', async (req, res) => {
 			token
 		});
 	} catch (error) {
+		console.log(error);
 		res.status(500).json({
 			ERROR: error.message
 		});
@@ -107,7 +108,7 @@ router.post('/add', validateSession, async function(req, res) {
 
 		if (user.isAdmin) {
 			const newUser = new User({
-				username: req.body.username,
+				userName: req.body.userName,
 				email: req.body.email,
 				password: bcrypt.hashSync(req.body.password, 10),
 				isAdmin: req.body.isAdmin
