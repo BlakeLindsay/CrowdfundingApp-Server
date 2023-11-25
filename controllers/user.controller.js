@@ -4,6 +4,7 @@ const User = require('../models/user.model.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const validateSession = require('../middleware/validateSession');
+const uploadURL = require('../s3.js');
 
 expireTime = '1 hour';
 
@@ -194,6 +195,14 @@ router.patch('/permissions/:id', validateSession, async function(req, res) {
 			ERROR: error.message
 		});
 	}
+});
+
+router.get("/geturl", async (req, res) => {
+	const url = await uploadURL();
+	console.log(url);
+	res.status(200).json({
+		url
+	});
 });
 
 module.exports = router;
