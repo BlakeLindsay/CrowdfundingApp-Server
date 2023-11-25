@@ -2,7 +2,7 @@ const aws = require("aws-sdk");
 const crypto = require("crypto");
 
 const region = "us-east-2";
-const bucketName = "crowdfunding-app-image-bucket-1";
+const bucketName = process.env.BUCKET;
 const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
 const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
 
