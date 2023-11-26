@@ -216,4 +216,19 @@ router.get("/profileimage/makeurl", validateSession, async (req, res) => {
 	}
 });
 
+router.get("/profileimage/geturl", validateSession, async (req, res) => {
+	try {
+		const userId = req.user._id;
+		const user = await User.findById(userId);
+
+		res.status(200).json({
+			url: user.profileImageLink
+		});
+	} catch (error) {
+		res.status(500).json({
+			ERROR: error.message
+		});
+	}
+});
+
 module.exports = router;
