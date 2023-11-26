@@ -17,8 +17,13 @@ db.once('open', () => console.log(`Connected to: ${MONGO}`));
 app.use(express.json());
 app.use(require('cors')());
 
+
 const users = require('./controllers/user.controller');
 
 app.use('/user', users);
+
+const campaign = require('./controllers/campaign.controller')
+
+app.use('/campaign', campaign);
 
 app.listen(PORT);
