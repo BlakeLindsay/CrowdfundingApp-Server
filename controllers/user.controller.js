@@ -197,7 +197,7 @@ router.patch('/permissions/:id', validateSession, async function(req, res) {
 	}
 });
 
-router.get("/profileimage/makeurl", validateSession, async (req, res) => {
+router.get("/makeurl/profileimage", validateSession, async (req, res) => {
 	try {
 		const url = await uploadURL();
 		console.log(url);
@@ -216,7 +216,7 @@ router.get("/profileimage/makeurl", validateSession, async (req, res) => {
 	}
 });
 
-router.get("/profileimage/geturl", validateSession, async (req, res) => {
+router.get("/geturl/profileimage", validateSession, async (req, res) => {
 	try {
 		const userId = req.user._id;
 		const user = await User.findById(userId);
