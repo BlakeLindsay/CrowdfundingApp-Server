@@ -32,7 +32,6 @@ router.post('/signup', async (req, res) => {
 			token
 		});
 	} catch (error) {
-		console.log(error);
 		res.status(500).json({
 			ERROR: error.message
 		});
@@ -197,10 +196,9 @@ router.patch('/permissions/:id', validateSession, async function(req, res) {
 	}
 });
 
-router.get("/makeurl/profileimage", validateSession, async (req, res) => {
+router.get("/profileimage/makeurl", validateSession, async (req, res) => {
 	try {
 		const url = await uploadURL();
-		console.log(url);
 
 		const userId = req.user._id;
 		const editedUser = await User.findByIdAndUpdate(userId, {profileImageLink: url}, {new: true});
@@ -216,7 +214,7 @@ router.get("/makeurl/profileimage", validateSession, async (req, res) => {
 	}
 });
 
-router.get("/geturl/profileimage", validateSession, async (req, res) => {
+router.get("/profileimage/geturl", validateSession, async (req, res) => {
 	try {
 		const userId = req.user._id;
 		const user = await User.findById(userId);
