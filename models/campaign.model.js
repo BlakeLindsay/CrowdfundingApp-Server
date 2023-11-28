@@ -21,10 +21,10 @@ const CampaignSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  pic: {
-    type: Buffer,
+  /* pic: {
+    type: ,
   required: false,
-  },
+  }, */
   owner: {
     type: String,
     required: true
