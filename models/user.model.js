@@ -22,6 +22,9 @@ const UserSchema = new mongoose.Schema({
 	canMakeCampaign: {
 		type: Boolean,
 		default: false
+	},
+	profileImageLink: {
+		type: String
 	}
 });
 

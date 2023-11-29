@@ -32,7 +32,6 @@ router.post('/signup', async (req, res) => {
 			token
 		});
 	} catch (error) {
-		console.log(error);
 		res.status(500).json({
 			ERROR: error.message
 		});
@@ -197,12 +196,50 @@ router.patch('/permissions/:id', validateSession, async function(req, res) {
 	}
 });
 
-router.get("/geturl", async (req, res) => {
-	const url = await uploadURL();
-	console.log(url);
-	res.status(200).json({
-		url
-	});
+router.get("/profileimage/makeurl", validateSession, async (req, res) => {
+	try {
+		const url = await uploadURL();
+
+		res.status(200).json({
+			url
+		});
+	} catch (error) {
+		res.status(500).json({
+			ERROR: error.message
+		});
+	}
+});
+
+router.get("/profileimage/geturl", validateSession, async (req, res) => {
+	try {
+		const userId = req.user._id;
+		const user = await User.findById(userId);
+
+		res.status(200).json({
+			url: user.profileImageLink
+		});
+	} catch (error) {
+		res.status(500).json({
+			ERROR: error.message
+		});
+	}
+});
+
+router.post("/profileimage/saveurl", validateSession, async (req, res) => {
+	try {
+		const { url } = req.body;
+		const userId = req.user._id;
+		const editedUser = await User.findByIdAndUpdate(userId, {profileImageLink: url}, {new: true});
+
+		res.status(200).json({
+			editedUser,
+			url
+		});
+	} catch (error) {
+		res.status(500).json({
+			ERROR: error.message
+		});
+	}
 });
 
 module.exports = router;
