@@ -35,7 +35,4 @@ router.post('/create',validateSession, async function (req, res) {
   }
 });
 
-
-
-
 module.exports = router;
