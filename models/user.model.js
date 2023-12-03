@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
-	username: {
+	userName: {
 		type: String, 
 		required: true,
 		unique: true
@@ -22,6 +22,9 @@ const UserSchema = new mongoose.Schema({
 	canMakeCampaign: {
 		type: Boolean,
 		default: false
+	},
+	profileImageLink: {
+		type: String
 	}
 });
 
