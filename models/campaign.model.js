@@ -9,6 +9,10 @@ const CampaignSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  fundRaised: {
+    type: Number,
+    
+  },
   campaignType: {
     type: String,
     required: true,

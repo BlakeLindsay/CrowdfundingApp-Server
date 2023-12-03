@@ -28,7 +28,6 @@ router.post('/create',validateSession, async function (req, res) {
     });
     //save new campaign
     const madeCampaign = await newCampaign.save();
-
     // Return a success response
     return res.status(200).json({ madeCampaign, message: 'Campaign created successfully' });
   } catch (error) {
@@ -51,7 +50,6 @@ router.get('/:campaignId', async function (req, res) {
     return res.status(500).json({ message: 'Internal server error'});
   }
 });
-
 //! Campaign Picture Link
 
 router.get("/campaignimage/makeurl", validateSession, async (req, res) => {
@@ -99,8 +97,6 @@ router.post("/campaignimage/saveurl", validateSession, async (req, res) => {
 		});
 	}
 });
-
-
-
+});
 
 module.exports = router;
