@@ -4,6 +4,7 @@ const User = require('../models/user.model.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const validateSession = require('../middleware/validateSession');
+const uploadURL = require('../s3.js');
 
 expireTime = '1 hour';
 
@@ -13,7 +14,7 @@ expireTime = '1 hour';
 router.post('/signup', async (req, res) => {
 	try {
 		const user = new User({
-			username: req.body.username,
+			userName: req.body.userName,
 			email: req.body.email,
 			password: bcrypt.hashSync(req.body.password, 10)
 		});
@@ -107,7 +108,7 @@ router.post('/add', validateSession, async function(req, res) {
 
 		if (user.isAdmin) {
 			const newUser = new User({
-				username: req.body.username,
+				userName: req.body.userName,
 				email: req.body.email,
 				password: bcrypt.hashSync(req.body.password, 10),
 				isAdmin: req.body.isAdmin
@@ -188,6 +189,52 @@ router.patch('/permissions/:id', validateSession, async function(req, res) {
 			throw new Error('not admin');
 		}
 
+	} catch (error) {
+		res.status(500).json({
+			ERROR: error.message
+		});
+	}
+});
+
+router.get("/profileimage/makeurl", validateSession, async (req, res) => {
+	try {
+		const url = await uploadURL();
+
+		res.status(200).json({
+			url
+		});
+	} catch (error) {
+		res.status(500).json({
+			ERROR: error.message
+		});
+	}
+});
+
+router.get("/profileimage/geturl", validateSession, async (req, res) => {
+	try {
+		const userId = req.user._id;
+		const user = await User.findById(userId);
+
+		res.status(200).json({
+			url: user.profileImageLink
+		});
+	} catch (error) {
+		res.status(500).json({
+			ERROR: error.message
+		});
+	}
+});
+
+router.post("/profileimage/saveurl", validateSession, async (req, res) => {
+	try {
+		const { url } = req.body;
+		const userId = req.user._id;
+		const editedUser = await User.findByIdAndUpdate(userId, {profileImageLink: url}, {new: true});
+
+		res.status(200).json({
+			editedUser,
+			url
+		});
 	} catch (error) {
 		res.status(500).json({
 			ERROR: error.message
