@@ -25,10 +25,25 @@ router.post('/create',validateSession, async function (req, res) {
       owner,
     });
     //save new campaign
-    await newCampaign.save();
+    const madeCampaign = await newCampaign.save();
 
     // Return a success response
-    return res.status(200).json({ message: 'Campaign created successfully' });
+    return res.status(200).json({ madeCampaign, message: 'Campaign created successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error'});
+  }
+});
+
+router.get('/:campaignId', async function (req, res) {
+  try {
+    const campaignId = req.params.campaignId;
+
+    //save new campaign
+    const campaign = await Campaign.findById(campaignId);
+
+    // Return a success response
+    return res.status(200).json({ campaign });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Internal server error'});

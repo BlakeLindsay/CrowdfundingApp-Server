@@ -32,4 +32,8 @@ const campaign = require('./controllers/campaign.controller')
 
 app.use('/campaign', campaign);
 
+const donation = require('./controllers/donation.controller');
+
+app.use('/donation', donation);
+
 app.listen(PORT);
