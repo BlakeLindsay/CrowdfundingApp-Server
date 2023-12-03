@@ -25,10 +25,10 @@ const CampaignSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  /* pic: {
-    type: ,
-  required: false,
-  }, */
+    campaignImageLink: {
+    type: String,
+    required: true,
+  }, 
   owner: {
     type: String,
     required: true
