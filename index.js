@@ -6,13 +6,7 @@ const app = express();
 
 const mongoose = require('mongoose');
 
-const { PORT, MONGO, HOST } = process.env;
-
-const uploadURL = require("./s3");
-
-app.listen(PORT, HOST, () => {
-	console.log(`[server] listening on ${HOST}:${PORT}`);
-});
+const { PORT, MONGO } = process.env;
 
 mongoose.connect(`${MONGO}CrowdfundingApp`);
 
@@ -23,17 +17,8 @@ db.once('open', () => console.log(`Connected to: ${MONGO}`));
 app.use(express.json());
 app.use(require('cors')());
 
-
 const users = require('./controllers/user.controller');
 
 app.use('/user', users);
-
-const campaign = require('./controllers/campaign.controller')
-
-app.use('/campaign', campaign);
-
-const donation = require('./controllers/donation.controller');
-
-app.use('/donation', donation);
 
 app.listen(PORT);
