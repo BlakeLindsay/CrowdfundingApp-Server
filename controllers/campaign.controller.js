@@ -97,6 +97,5 @@ router.post("/campaignimage/saveurl", validateSession, async (req, res) => {
 		});
 	}
 });
-});
 
 module.exports = router;
