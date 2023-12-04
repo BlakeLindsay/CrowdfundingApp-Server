@@ -14,7 +14,7 @@ router.post('/create',validateSession, async function (req, res) {
       campaignImageLink
     } = req.body;
 // saving user
-    const owner = req.user._id;
+    const owner = req.user.userName;
 
     // Save campaign to the database
     const newCampaign = new Campaign({
@@ -97,6 +97,9 @@ router.post("/campaignimage/saveurl", validateSession, async (req, res) => {
 		});
 	}
 });
+<<<<<<< HEAD
 
+=======
+>>>>>>> e7c0a6bf593d51568ede1e5cb7c6ef7197a009bd
 
 module.exports = router;
