@@ -25,14 +25,19 @@ router.post('/create',validateSession, async function (req, res) {
       detailDesc,
       campaignImageLink,
       owner,
+      ownerID: req.user._id,
     });
     //save new campaign
     const madeCampaign = await newCampaign.save();
-    // Return a success response
-    return res.status(200).json({ madeCampaign, message: 'Campaign created successfully' });
+     // Return a success response with loggedInUser information
+     return res.status(200).json({
+      madeCampaign,
+      loggedInUser: res.locals.loggedInUser,
+      message: 'Campaign created successfully',
+    });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Internal server error'});
+    return res.status(500).json({ message: 'Internal server error' });
   }
 });
 
@@ -97,9 +102,19 @@ router.post("/campaignimage/saveurl", validateSession, async (req, res) => {
 		});
 	}
 });
-<<<<<<< HEAD
 
-=======
->>>>>>> e7c0a6bf593d51568ede1e5cb7c6ef7197a009bd
+router.delete('/delete/:campaignId', validateSession, async function (req, res) {
+  try {
+    const campaignId = req.params.campaignId;
+    // Delete the campaign
+    await Campaign.findByIdAndDelete(campaignId);
+
+    return res.status(200).json({ message: 'Campaign deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 module.exports = router;
