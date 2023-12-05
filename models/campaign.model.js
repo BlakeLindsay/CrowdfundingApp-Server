@@ -32,6 +32,10 @@ const CampaignSchema = new mongoose.Schema({
   owner: {
     type: String,
     required: true
+  },
+  ownerID: {
+    type: mongoose.Types.ObjectId,
+    required: true,
   }
 });
 
