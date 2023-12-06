@@ -1,3 +1,4 @@
+const crypto = require("crypto");
 const router = require('express').Router();
 
 async function getAccessToken() {
@@ -30,14 +31,28 @@ router.get("/getaccesstoken", async (req, res) => {
 router.post('/donate', async (req, res) => {
 	try {
 		const accessToken = await getAccessToken();
+		// console.log(req.body.intent);
 		let order_data_json = {
-			'intent': req.body.intent.toUpperCase(),
+			// 'intent': req.body.intent.toUpperCase(),
+			'intent': "CAPTURE",
 			'purchase_units': [{
 				'amount': {
 					'currency_code': 'USD',
 					'value': '10.00'
-				}
-			}]
+				},
+				'items': [
+					{
+						'name': "test",
+						'quantity': 1,
+						'category': 'DONATION',
+						'unit_amount': {
+							'currency_code': "USD",
+							'value': '10.00'
+						}
+					}
+				]
+			}
+		]
 		};
 		const data = JSON.stringify(order_data_json);
 
@@ -50,8 +65,9 @@ router.post('/donate', async (req, res) => {
 			},
 			body: data
 		});
-		const results = response.json();
-		res.status(200).send({id: results.id});
+		const results = await response.json();
+		console.log(results);
+		res.status(200).json({id: results.id});
 	} catch (error) {
 		res.status(500).json({
 			ERROR: error.message
