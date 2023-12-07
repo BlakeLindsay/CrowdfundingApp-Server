@@ -1,6 +1,8 @@
 const crypto = require("crypto");
 const router = require('express').Router();
 
+let accessToken;
+
 async function getAccessToken() {
 	const response = await fetch("https://api-m.sandbox.paypal.com/v1/oauth2/token", {
 			headers: new Headers({
@@ -12,8 +14,9 @@ async function getAccessToken() {
 			})
 		});
 		const results = await response.json();
-		const accessToken = results.access_token;
-		console.log(accessToken);
+		// const accessToken = results.access_token;
+		accessToken = results.access_token;
+		// console.log({accessToken});
 		return accessToken;
 };
 
@@ -30,7 +33,8 @@ router.get("/getaccesstoken", async (req, res) => {
 
 router.post('/donate', async (req, res) => {
 	try {
-		const accessToken = await getAccessToken();
+		accessToken = await getAccessToken();
+		console.log(accessToken);
 		// console.log(req.body.intent);
 		let order_data_json = {
 			// 'intent': req.body.intent.toUpperCase(),
@@ -75,19 +79,25 @@ router.post('/donate', async (req, res) => {
 	}
 });
 
-router.post('complete_donate', async (req, res) => {
+router.post('/:id', async (req, res) => {
 	try {
-		const accessToken = await getAccessToken();
-		const response = await fetch("https://api-m.sandbox.paypal.com/v2/checkout/orders", {
+		const id = req.params.id;
+		await getAccessToken();
+		console.log({accessToken, id});
+		// const accessToken = req.body.facilitatorToken;
+		const response = await fetch(`https://api-m.sandbox.paypal.com/v2/checkout/orders/${id}/capture`, {
 			method: 'POST',
 			headers: {
-				'ContentType': 'application/json',
+				'Content-Type': 'application/json',
 				'Authorization': `Bearer ${accessToken}`
+				// 'Authorization': `Basic ${btoa(`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`)}`
 			}
 		});
-		const results = response.json();
+		const results = await response.json();
+		console.log(results);
 		res.status(200).send(results);
 	} catch (error) {
+		console.log(error);
 		res.status(500).json({
 			ERROR: error.message
 		})
