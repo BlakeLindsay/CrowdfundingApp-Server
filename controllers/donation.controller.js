@@ -218,13 +218,12 @@ const captureOrder = async (orderID) => {
       // "PayPal-Mock-Response": '{"mock_application_codes": "TRANSACTION_REFUSED"}'
       // "PayPal-Mock-Response": '{"mock_application_codes": "INTERNAL_SERVER_ERROR"}'
     },
-		body: {
+		body: JSON.stringify({
 			payment_source: {
 				paypal: {
 					email_address: "sb-x1evn28477614@personal.example.com"
 				}
-			}
-		}
+		}})
   });
 
   return handleResponse(response);
