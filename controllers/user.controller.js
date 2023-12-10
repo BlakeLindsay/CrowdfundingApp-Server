@@ -97,6 +97,34 @@ router.delete('/delete/:id', validateSession, async function(req, res) {
 	}
 });
 
+router.delete('/deletebyname/:username', validateSession, async function(req, res) {
+	try {
+		const userName = req.params.username;
+		const userId = req.user._id;
+
+		const user = await User.findById(userId);
+
+		if (user.isAdmin) {
+
+			const deletedUser = await User.findOneAndDelete({ userName });
+
+			res.status(200).json({
+				deletedUser,
+				message: 'successfully deleted user'
+			});
+
+		} else {
+			throw new Error('not admin');
+		}
+
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({
+			ERROR: error.message
+		});
+	}
+});
+
 /**
  * admins can directly add users with specific settings (including isAdmin)
  */

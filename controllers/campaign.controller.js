@@ -171,7 +171,7 @@ router.delete(
 );
 
 router.delete(
-  "/delete/:campaignName",
+  "/deletebyname/:campaignName",
   validateSession,
   async function (req, res) {
     try {
