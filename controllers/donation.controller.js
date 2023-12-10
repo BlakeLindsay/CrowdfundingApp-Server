@@ -6,7 +6,9 @@ const validateSession = require('../middleware/validateSession');
 
 router.post('/', async (req, res) => {
 	try {
-		const {amount, message, donationName, userID, campaignId} = req.body;
+		let {amount, message, donationName, userID, campaignId} = req.body;
+		amount = parseInt(amount);
+		console.log({amount, typeof: typeof amount})
 		let donation = {amount, message, name: donationName, campaignId};
 		donation.date = Date();
 
@@ -22,10 +24,15 @@ router.post('/', async (req, res) => {
 		
 		const campaign = await Campaign.findById(campaignId);
 
+		console.log({campaign, amount})
+
 		let fundRaised = campaign.fundRaised;
+		fundRaised = parseInt(fundRaised);
 		fundRaised += amount;
 
 		const editedCampaign = await Campaign.findByIdAndUpdate(campaignId, { fundRaised }, {new: true});
+
+		console.log({editedCampaign});
 
 		res.status(200).json({
 			donation: returnedDonation,

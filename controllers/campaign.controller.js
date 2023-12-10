@@ -26,6 +26,7 @@ router.post("/create", validateSession, async function (req, res) {
       campaignImageLink,
       owner,
       ownerID: req.user._id,
+			fundRaised: 0
     });
     //save new campaign
     const madeCampaign = await newCampaign.save();
@@ -42,24 +43,43 @@ router.post("/create", validateSession, async function (req, res) {
 });
 
 //! Get All Campaign
-router.get("/list", async (req, res) => {
+router.get("/getall", async (req, res) => {
   try {
-    const { searchTerm, campaignType } = req.query;
 
-    console.log("Received searchTerm:", searchTerm);
-    console.log("Received campaignType:", campaignType);
+    // console.log("Received searchTerm:", searchTerm);
+    // console.log("Received campaignType:", campaignType);
     // Use MongoDB queries to filter campaigns based on the search term and type
     const campaigns = await Campaign.find({
-      $or: [
-        { campaignName: { $regex: new RegExp(searchTerm, "i") } },
-        { campaignType: { $regex: new RegExp(campaignType, "i") } },
-      ],
+      // $or: [
+      //   { campaignName: { $regex: new RegExp(searchTerm, "i") } },
+      //   { campaignType: { $regex: new RegExp(campaignType, "i") } },
+      // ],
+			// campaignType
     });
 
     if (campaigns.length > 0) {
       res.status(200).json({ campaigns });
     } else {
-      res.status(404).json({ message: "No Campaigns Found" });
+      res.status(400).json({ message: "No Campaigns Found" });
+    }
+  } catch (err) {
+    console.error("Error fetching campaigns:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+router.get("/search/category/:category", async (req, res) => {
+  try {
+		const campaignType = req.params.category;
+
+    const campaigns = await Campaign.find({
+      campaignType
+    });
+
+    if (campaigns.length > 0) {
+      res.status(200).json({ campaigns });
+    } else {
+      res.status(400).json({ message: "No Campaigns Found" });
     }
   } catch (err) {
     console.error("Error fetching campaigns:", err);
