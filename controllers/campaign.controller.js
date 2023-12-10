@@ -41,6 +41,32 @@ router.post("/create", validateSession, async function (req, res) {
   }
 });
 
+//! Get All Campaign
+router.get("/list", async (req, res) => {
+  try {
+    const { searchTerm, campaignType } = req.query;
+
+    console.log("Received searchTerm:", searchTerm);
+    console.log("Received campaignType:", campaignType);
+    // Use MongoDB queries to filter campaigns based on the search term and type
+    const campaigns = await Campaign.find({
+      $or: [
+        { campaignName: { $regex: new RegExp(searchTerm, "i") } },
+        { campaignType: { $regex: new RegExp(campaignType, "i") } },
+      ],
+    });
+
+    if (campaigns.length > 0) {
+      res.status(200).json({ campaigns });
+    } else {
+      res.status(404).json({ message: "No Campaigns Found" });
+    }
+  } catch (err) {
+    console.error("Error fetching campaigns:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 router.get("/:campaignId", async function (req, res) {
   try {
     const campaignId = req.params.campaignId;
