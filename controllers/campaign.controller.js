@@ -99,7 +99,7 @@ router.get("/campaignimage/makeurl", validateSession, async (req, res) => {
 
 router.get("/campaignimage/geturl", validateSession, async (req, res) => {
   try {
-    const campaignId = req.campaign._id;
+    const campaignId = req.body.campaign._id;
     const campaign = await Campaign.findById(campaignId);
 
     res.status(200).json({
@@ -141,6 +141,30 @@ router.delete(
       const campaignId = req.params.campaignId;
       // Delete the campaign
       await Campaign.findByIdAndDelete(campaignId);
+
+      return res.status(200).json({ message: "Campaign deleted successfully" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+);
+
+router.delete(
+  "/delete/:campaignName",
+  validateSession,
+  async function (req, res) {
+    try {
+     
+      const campaignName = req.params.campaignName;
+      console.log("Deleting campaign by name:", campaignName);
+      
+      // Delete the campaign by name
+      const result = await Campaign.findOneAndDelete({ campaignName: campaignName });
+
+      if (!result) {
+        return res.status(404).json({ message: "Campaign not found" });
+      }
 
       return res.status(200).json({ message: "Campaign deleted successfully" });
     } catch (error) {
