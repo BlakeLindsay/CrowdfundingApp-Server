@@ -68,6 +68,25 @@ router.get("/getall", async (req, res) => {
   }
 });
 
+router.get("/search/name/:name", async (req, res) => {
+  try {
+		const name = req.params.name;
+
+		const query = { $text: { $search: `${name}` } };
+
+    const campaigns = await Campaign.find(query);
+
+    if (campaigns.length > 0) {
+      res.status(200).json({ campaigns });
+    } else {
+      res.status(400).json({ message: "No Campaigns Found" });
+    }
+  } catch (err) {
+    console.error("Error fetching campaigns:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 router.get("/search/category/:category", async (req, res) => {
   try {
 		const campaignType = req.params.category;
