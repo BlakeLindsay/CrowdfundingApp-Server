@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+// const Donation = require('../models/donation.model.js');
 
 const CampaignSchema = new mongoose.Schema({
   campaignName: {
@@ -32,7 +33,15 @@ const CampaignSchema = new mongoose.Schema({
   owner: {
     type: String,
     required: true
-  }
+  },
+  ownerID: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+  },
+	// donations: {
+	// 	type: [Donation],
+	// 	default: undefined
+	// }
 });
 
 module.exports = mongoose.model('Campaign', CampaignSchema);

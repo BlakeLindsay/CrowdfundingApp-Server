@@ -97,6 +97,34 @@ router.delete('/delete/:id', validateSession, async function(req, res) {
 	}
 });
 
+router.delete('/deletebyname/:username', validateSession, async function(req, res) {
+	try {
+		const userName = req.params.username;
+		const userId = req.user._id;
+
+		const user = await User.findById(userId);
+
+		if (user.isAdmin) {
+
+			const deletedUser = await User.findOneAndDelete({ userName });
+
+			res.status(200).json({
+				deletedUser,
+				message: 'successfully deleted user'
+			});
+
+		} else {
+			throw new Error('not admin');
+		}
+
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({
+			ERROR: error.message
+		});
+	}
+});
+
 /**
  * admins can directly add users with specific settings (including isAdmin)
  */
@@ -241,5 +269,37 @@ router.post("/profileimage/saveurl", validateSession, async (req, res) => {
 		});
 	}
 });
+
+
+// this route is to check if a user is an admin
+router.get('/adminStatus/:id', validateSession, async function (req, res) {
+  try {
+    const { id: userId } = req.params;
+
+    // Log the received id and userId
+    console.log('Received ID:', req.params.id);
+    console.log('Decoded UserID:', userId);
+
+    const user = await User.findById(userId);
+
+    // Log the found user
+    console.log('Found User:', user);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    res.status(200).json({
+      isAdmin: user.isAdmin,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      ERROR: error.message,
+    });
+  }
+});
+
+
 
 module.exports = router;

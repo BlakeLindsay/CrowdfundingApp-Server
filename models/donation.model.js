@@ -5,6 +5,10 @@ const DonationSchema = new mongoose.Schema({
 		type: Number,
 		required: true
 	},
+	message: {
+		type: String,
+
+	},
 	date: {
 		type: Date,
 		required: true
@@ -12,6 +16,13 @@ const DonationSchema = new mongoose.Schema({
 	name: {
 		type: String,
 		default: 'Anonymous'
+	},
+	ownerID: {
+		type: mongoose.Types.ObjectId,
+	},
+	campaignId: {
+		type: mongoose.Types.ObjectId,
+		required: true
 	}
 });
 
